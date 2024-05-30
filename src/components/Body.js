@@ -1,7 +1,8 @@
-import RestaurantCard from './RestaurantCard';
-import { useEffect, useState } from 'react';
+import RestaurantCard, { withPromotedLabel } from './RestaurantCard';
+import { useEffect, useState, useContext } from 'react';
 import Shimmer from './Shimmer';
 import { Link } from 'react-router-dom';
+import UserContext from '../utils/UserContext';
 
 import useOnlineStatus from '../utils/useOnlineStatus';
 
@@ -11,6 +12,8 @@ const Body = () => {
   const [filteredRestaurant, setFilteredRestaurant] = useState('');
 
   const [searchText, setSearchText] = useState('');
+
+  const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
 
   const onlineStatus = useOnlineStatus();
 
@@ -31,10 +34,14 @@ const Body = () => {
     );
   };
 
+  // console.log(listOfRestaurants);
   if (!onlineStatus)
     return (
       <h1>Looks like you're offline!! Please check your internet connection</h1>
     );
+
+  // Use Context
+  const { loggedInUser, setUserName } = useContext(UserContext);
 
   return !listOfRestaurants.length ? (
     <Shimmer />
@@ -64,7 +71,7 @@ const Body = () => {
             Search
           </button>
         </div>
-        <div className='search m-4 p4 flex items-center '>
+        <div className='search m-4 p-4 flex items-center '>
           <button
             className='px-4 py-2 bg-gray-100 rounded-lg'
             onClick={() => {
@@ -77,11 +84,24 @@ const Body = () => {
             Top Rated Restaurants
           </button>
         </div>
+        <div className='search m-4 p-4 flex items-center '>
+          <label>UserName: </label>
+          <input
+            type='text'
+            className='border border-black p-2'
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
       <div className='flex flex-wrap'>
-        {filteredRestaurant.map((obj) => (
+        {filteredRestaurant.map((obj, ind) => (
           <Link key={obj.info.id} to={'restaurants/' + obj.info.id}>
-            <RestaurantCard resObj={obj} />
+            {ind & 1 ? (
+              <RestaurantCardPromoted resObj={obj} />
+            ) : (
+              <RestaurantCard resObj={obj} />
+            )}
           </Link>
         ))}
       </div>

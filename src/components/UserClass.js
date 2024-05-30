@@ -9,11 +9,11 @@ class UserClass extends React.Component {
         location: 'Default',
       },
     };
-    console.log('Child constructor');
+    // console.log('Child constructor');
   }
 
   async componentDidMount() {
-    console.log('Child component Did mount called');
+    // console.log('Child component Did mount called');
 
     const data = await fetch('https://api.github.com/users/abd4u');
     const json = await data.json();
@@ -23,15 +23,15 @@ class UserClass extends React.Component {
     });
   }
   componentDidUpdate() {
-    console.log('Component update called');
+    // console.log('Component update called');
   }
 
   componentWillUnmount() {
-    console.log('component will unmount');
+    // console.log('component will unmount');
   }
 
   render() {
-    console.log('Child Render called');
+    // console.log('Child Render called');
     // const { name, location } = this.state.userInfo;
     return (
       <div className='user-card'>
